@@ -22,7 +22,7 @@ class TimeEntry(Base):
     
     timer_ts = Column(DateTime)
     
-    ticket_id = Column(Integer, nullable=True, index=True)
+    ticket_id = Column(String, nullable=True, index=True)
     
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False, index=True)
     # TODO: task

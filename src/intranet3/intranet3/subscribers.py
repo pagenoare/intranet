@@ -2,7 +2,7 @@ import datetime
 
 from markupsafe import Markup
 
-from pyramid.httpexceptions import HTTPForbidden
+from pyramid.exceptions import BadCSRFToken
 from pyramid.events import subscriber
 from pyramid.events import BeforeRender, ContextFound
 
@@ -65,7 +65,11 @@ def add_global(event):
 @subscriber(ContextFound)
 def csrf_validation(event):
     request = event.request
+    # TODO Remove this hack
+    if request.matched_route.name == 'webhook_jira':
+        return
+
     if not request.is_xhr and request.method == "POST":
         csrf_token = request.POST.get('csrf_token')
         if csrf_token is None or csrf_token != request.session.get_csrf_token():
-            raise HTTPForbidden('CSRF token is missing or invalid')
+            raise BadCSRFToken('CSRF token is missing or invalid')
