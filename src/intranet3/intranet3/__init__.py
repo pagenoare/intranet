@@ -107,6 +107,8 @@ def main(global_config, **settings):
     pyramid_config.add_route('api_absence', '/api/absence')
     pyramid_config.add_route('api_absence_days', '/api/absence_days')
 
+    pyramid_config.add_route('webhook_jira', '/api/webhooks/jira')
+
     pyramid_config.add_renderer('.html', 'pyramid_jinja2.renderer_factory')
     pyramid_config.add_renderer(None, 'intranet3.utils.renderer.renderer_factory')
     pyramid_config.add_translation_dirs('intranet3:locale/')

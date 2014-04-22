@@ -10,12 +10,16 @@ from intranet3.utils.timeentry import add_time
 from intranet3.log import DEBUG_LOG
 
 DEBUG = DEBUG_LOG(__name__)
+HOGARTH_JIRA_IP = '131.103.29.210'
 
 
 @view_config(route_name='webhook_jira', renderer='json', permission=NO_PERMISSION_REQUIRED)
 class JiraWebhookHandler(ApiView):
 
     def post(self):
+        if self.request.client_addr != HOGARTH_JIRA_IP:
+            return Response(status=403)
+
         self.data = self.request.json_body
         query = Tracker.query.filter(Tracker.name == 'Hogarth Jira') # TODO this one should be more generic
         self.tracker = query.first()
